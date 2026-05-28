@@ -23,7 +23,7 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
 genai.configure(api_key=GOOGLE_API_KEY)
 
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+model = genai.GenerativeModel("gemini-1.5-pro")
 
 # -------------------------------
 # TITLE
@@ -82,11 +82,11 @@ if uploaded_files:
 
             with st.spinner(f"Generating content for {uploaded_file.name}..."):
 
-                response = model.generate_content(
-                    [prompt, image]
-                )
-
-                output = response.text
+                try:
+                    response = model.generate_content([prompt, image])
+                    output = response.text
+                except Exception as e:
+                    output = f"Error generating description: {str(e)}"
 
                 st.markdown("### Generated Result")
                 st.write(output)
